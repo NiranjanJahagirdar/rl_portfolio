@@ -84,4 +84,31 @@ for x in range(num_ports):
     # Sharpe Ratio
     sharpe_arr[x] = ret_arr[x]/vol_arr[x]
     
- print(all_weights[format(sharpe_arr.argmax()):])
+print(all_weights[format(sharpe_arr.argmax()):])
+
+plt.figure(figsize=(12,8))
+plt.scatter(vol_arr, ret_arr, c=sharpe_arr, cmap='viridis')
+plt.colorbar(label='Sharpe Ratio')
+plt.xlabel('Volatility')
+plt.ylabel('Return')
+plt.scatter(max_sr_vol, max_sr_ret,c='red', s=50) # red dot
+plt.show()
+
+def get_ret_vol_sr(weights):
+    weights = np.array(weights)
+    ret = np.sum(log_ret.mean() * weights) * 252
+    vol = np.sqrt(np.dot(weights.T, np.dot(log_ret.cov()*252, weights)))
+    sr = ret/vol
+    return np.array([ret, vol, sr])
+
+def neg_sharpe(weights):
+# the number 2 is the sharpe ratio index from the get_ret_vol_sr
+    return get_ret_vol_sr(weights)[2] * -1
+
+def check_sum(weights):
+    #return 0 if sum of the weights is 1
+    return np.sum(weights)-1
+
+
+
+
